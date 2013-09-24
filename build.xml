@@ -28,6 +28,7 @@
     </jar>
   </target>
 
+  <!-- TODO: how to use haddoop jar run this jar?-->
   <target name="run">
     <java jar="build/jar/FileSystemDoubleCat.jar" fork="true"/>
   </target>
