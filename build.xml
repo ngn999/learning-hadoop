@@ -1,0 +1,35 @@
+<project>
+  <property name="lib.dir"     value="/home/tangyi/hadoop-2.1.0-beta/share/hadoop/"/>
+  <path id="build.classpath">
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
+
+
+  <target name="clean">
+    <delete dir="build"/>
+  </target>
+
+  <target name="compile">
+    <mkdir dir="build/classes"/>
+    <javac srcdir="src" destdir="build/classes" classpathref="build.classpath"/>
+  </target>
+
+  <target name="jar">
+    <mkdir dir="build/jar"/>
+    <jar destfile="build/jar/FileSystemDoubleCat.jar"
+         basedir="build/classes">
+      <manifest>
+        <attribute
+            name="Main-Class"
+            value="FileSystemDoubleCat"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="run">
+    <java jar="build/jar/FileSystemDoubleCat.jar" fork="true"/>
+  </target>
+
+</project>
