@@ -1,5 +1,11 @@
-<project>
-  <property name="lib.dir"     value="/home/tangyi/hadoop-2.1.0-beta/share/hadoop/"/>
+<project name="FileSystemDoubleCat" basedir="." default="main">
+  <property name="lib.dir"
+            value="/home/tangyi/hadoop-2.1.0-beta/share/hadoop/"/>
+  <property name="src.dir"     value="src"/>
+  <property name="build.dir"   value="build"/>
+  <property name="classes.dir" value="${build.dir}/classes"/>
+  <property name="jar.dir"     value="${build.dir}/jar"/>
+  <property name="main-class"  value="FileSystemDoubleCat"/>
   <path id="build.classpath">
     <fileset dir="${lib.dir}">
       <include name="**/*.jar" />
@@ -8,29 +14,33 @@
 
 
   <target name="clean">
-    <delete dir="build"/>
+    <delete dir="${build.dir}"/>
   </target>
 
   <target name="compile">
     <mkdir dir="build/classes"/>
-    <javac srcdir="src" destdir="build/classes" classpathref="build.classpath"/>
+    <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="build.classpath"/>
   </target>
 
-  <target name="jar">
-    <mkdir dir="build/jar"/>
-    <jar destfile="build/jar/FileSystemDoubleCat.jar"
-         basedir="build/classes">
+  <target name="jar" depends="compile">
+    <mkdir dir="${jar.dir}"/>
+    <jar destfile="${jar.dir}/${ant.project.name}.jar"
+         basedir="${classes.dir}">
       <manifest>
         <attribute
             name="Main-Class"
-            value="FileSystemDoubleCat"/>
+            value="${main-class}"/>
       </manifest>
     </jar>
   </target>
 
   <!-- TODO: how to use haddoop jar run this jar?-->
-  <target name="run">
-    <java jar="build/jar/FileSystemDoubleCat.jar" fork="true"/>
+  <target name="run" depends="jar">
+    <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
   </target>
+
+  <target name="clean-build" depends="clean,jar"/>
+
+  <target name="main" depends="clean,run"/>
 
 </project>
